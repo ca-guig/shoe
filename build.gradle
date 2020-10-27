@@ -18,7 +18,6 @@ repositories {
 configurations {
     testImplementation {
         exclude group: 'junit'
-        exclude group: 'org.hamcrest'
         exclude group: 'org.junit.vintage'
     }
 }
