@@ -1,0 +1,40 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+group 'ca.guig'
+version '1.0.0'
+
+sourceCompatibility = JavaVersion.VERSION_14
+targetCompatibility = JavaVersion.VERSION_14
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    testImplementation {
+        exclude group: 'junit'
+        exclude group: 'org.hamcrest'
+        exclude group: 'org.junit.vintage'
+    }
+}
+
+dependencies {
+    // Web
+    implementation('org.springframework.boot:spring-boot-starter-web')
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    layered()
+}
