@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.repository.GameRepository;
 import ca.guig.shoe.repository.InMemoryGameRepository;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class GameServiceTest {
@@ -65,7 +66,7 @@ class GameServiceTest {
     @Test
     void updateShouldThrowExceptionWhenGameDoesNotExist() {
         Assertions
-                .assertThatThrownBy(() ->gameService.updateGame("1000", new Game("new-test-game-name")))
+                .assertThatThrownBy(() -> gameService.updateGame("1000", new Game("new-test-game-name")))
                 .isInstanceOf(GameNotFoundException.class);
     }
 

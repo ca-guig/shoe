@@ -37,3 +37,49 @@ test {
 bootJar {
     layered()
 }
+
+// *********************************************************************************************************************
+
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion = '8.36.2'
+    maxWarnings = 0
+    maxErrors = 0
+}
+
+project.afterEvaluate {
+    tasks.withType(Test) {
+        shouldRunAfter tasks.withType(Checkstyle)
+    }
+}
+
+// *********************************************************************************************************************
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.6"
+}
+
+check.dependsOn jacocoTestReport
+
+project.afterEvaluate {
+    jacocoTestReport.shouldRunAfter tasks.withType(Test)
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'BUNDLE'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = project.hasProperty('minCodeCoverage') ? Double.parseDouble("${project.minCodeCoverage}") : 1.0
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+jacocoTestCoverageVerification.shouldRunAfter jacocoTestReport

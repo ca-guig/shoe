@@ -3,8 +3,6 @@ package ca.guig.shoe.controller;
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.service.GameNotFoundException;
 import ca.guig.shoe.service.GameService;
-import java.net.URI;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/v1/games")

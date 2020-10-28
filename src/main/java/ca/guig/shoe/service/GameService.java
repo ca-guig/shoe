@@ -2,8 +2,9 @@ package ca.guig.shoe.service;
 
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.repository.GameRepository;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GameService {

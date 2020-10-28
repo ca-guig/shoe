@@ -11,15 +11,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.service.GameNotFoundException;
 import ca.guig.shoe.service.GameService;
-import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.mockito.AdditionalAnswers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 @WebMvcTest(controllers = GameController.class)
 class GameControllerTest {
@@ -81,11 +81,11 @@ class GameControllerTest {
                 .given(gameService)
                 .findAll();
 
-        String expectedJson = "" +
-                "[" +
-                "  {\"id\":\"1000\",\"name\":\"mock-name-1\"}," +
-                "  {\"id\":\"2000\",\"name\":\"mock-name-2\"}" +
-                "]";
+        String expectedJson = ""
+                + "["
+                + "  {\"id\":\"1000\",\"name\":\"mock-name-1\"},"
+                + "  {\"id\":\"2000\",\"name\":\"mock-name-2\"}"
+                + "]";
         mvc
                 .perform(get("/rest/v1/games"))
                 .andExpect(status().isOk())

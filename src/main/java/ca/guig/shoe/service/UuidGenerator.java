@@ -1,7 +1,8 @@
 package ca.guig.shoe.service;
 
-import java.util.UUID;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class UuidGenerator implements IdGenerator {

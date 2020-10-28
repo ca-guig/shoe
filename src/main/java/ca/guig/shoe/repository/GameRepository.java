@@ -1,6 +1,7 @@
 package ca.guig.shoe.repository;
 
 import ca.guig.shoe.domain.Game;
+
 import java.util.List;
 
 public interface GameRepository {
