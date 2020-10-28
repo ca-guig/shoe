@@ -1,46 +1,22 @@
 package ca.guig.shoe.service;
 
 import ca.guig.shoe.domain.Game;
-import ca.guig.shoe.repository.GameRepository;
-import org.springframework.stereotype.Service;
+import ca.guig.shoe.domain.Player;
 
 import java.util.List;
 
-@Service
-public class GameService {
+public interface GameService {
+    Game createGame(Game game);
 
-    private final GameRepository repository;
+    Game readGame(String gameId);
 
-    private final IdGenerator idGenerator;
+    Game updateGame(String gameId, Game game);
 
-    public GameService(GameRepository repository, IdGenerator idGenerator) {
-        this.repository = repository;
-        this.idGenerator = idGenerator;
-    }
+    void deleteGame(String gameId);
 
-    public Game createGame(Game game) {
-        Game copiedGame = new Game(idGenerator.generateId(), game.getName());
-        return repository.save(copiedGame);
-    }
+    List<Game> findAll();
 
-    public Game readGame(String id) {
-        Game game = repository.read(id);
-        if (game == null) {
-            throw new GameNotFoundException();
-        }
-        return game;
-    }
+    void addPlayer(String gameId, Player player);
 
-    public Game updateGame(String id, Game game) {
-        Game existingGame = readGame(id);
-        return repository.save(new Game(existingGame.getId(), game.getName()));
-    }
-
-    public void deleteGame(String id) {
-        repository.delete(id);
-    }
-
-    public List<Game> findAll() {
-        return repository.findAll();
-    }
+    void removePlayer(String gameId, String playerId);
 }

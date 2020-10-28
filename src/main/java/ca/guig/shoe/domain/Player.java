@@ -5,25 +5,19 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-@JsonDeserialize(builder = Game.Builder.class)
-public final class Game {
+@JsonDeserialize(builder = Player.Builder.class)
+public final class Player {
 
     @JsonProperty(access = READ_ONLY)
     private final String id;
 
     private final String name;
 
-    @JsonProperty(access = READ_ONLY)
-    private final Map<String, Player> players;
-
-    private Game(String id, String name, Map<String, Player> players) {
+    private Player(String id, String name) {
         this.id = id;
         this.name = name;
-        this.players = Map.copyOf(players);
     }
 
     public String getId() {
@@ -34,10 +28,6 @@ public final class Game {
         return name;
     }
 
-    public Map<String, Player> getPlayers() {
-        return players;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -46,23 +36,21 @@ public final class Game {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Game game = (Game) o;
-        return Objects.equals(id, game.id)
-                && Objects.equals(name, game.name)
-                && Objects.equals(players, game.players);
+        Player player = (Player) o;
+        return Objects.equals(id, player.id)
+                && Objects.equals(name, player.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, players);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
-        return "Game{"
+        return "Player{"
                 + "id='" + id + '\''
                 + ", name='" + name + '\''
-                + ", players=" + players
                 + '}';
     }
 
@@ -75,8 +63,6 @@ public final class Game {
 
         private String name;
 
-        private final Map<String, Player> players = new HashMap<>();
-
         public Builder withId(final String id) {
             this.id = id;
             return this;
@@ -87,24 +73,8 @@ public final class Game {
             return this;
         }
 
-        public Builder withPlayers(final Map<String, Player> players) {
-            this.players.clear();
-            this.players.putAll(players);
-            return this;
-        }
-
-        public Builder addPlayer(Player player) {
-            this.players.put(player.getId(), player);
-            return this;
-        }
-
-        public Builder removePlayer(String playerId) {
-            this.players.remove(playerId);
-            return this;
-        }
-
-        public Game build() {
-            return new Game(id, name, players);
+        public Player build() {
+            return new Player(id, name);
         }
     }
 }

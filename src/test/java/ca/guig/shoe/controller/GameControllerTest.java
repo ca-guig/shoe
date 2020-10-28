@@ -32,7 +32,7 @@ class GameControllerTest {
 
     @Test
     void createShouldCreateGame() throws Exception {
-        BDDMockito.willReturn(new Game("1000", "mock")).given(gameService).createGame(BDDMockito.any());
+        BDDMockito.willReturn(game("1000", "mock")).given(gameService).createGame(BDDMockito.any());
 
         String json = "{\"name\":\"test-game-name\"}";
         mvc
@@ -40,12 +40,12 @@ class GameControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", "http://localhost/rest/v1/games/1000"));
 
-        BDDMockito.verify(gameService).createGame(BDDMockito.refEq(new Game("test-game-name")));
+        BDDMockito.verify(gameService).createGame(BDDMockito.refEq(game("test-game-name")));
     }
 
     @Test
     void readShouldReturnGame() throws Exception {
-        BDDMockito.willReturn(new Game("1000", "mock-name")).given(gameService).readGame("1000");
+        BDDMockito.willReturn(game("1000", "mock-name")).given(gameService).readGame("1000");
 
         mvc
                 .perform(get("/rest/v1/games/{id}", "1000"))
@@ -55,14 +55,14 @@ class GameControllerTest {
 
     @Test
     void updateShouldUpdateGame() throws Exception {
-        BDDMockito.willReturn(new Game("1000", "mock-name")).given(gameService).readGame("1000");
+        BDDMockito.willReturn(game("1000", "mock-name")).given(gameService).readGame("1000");
 
         String json = "{\"name\":\"test-game-name\"}";
         mvc
                 .perform(put("/rest/v1/games/{id}", "1000").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isNoContent());
 
-        BDDMockito.verify(gameService).updateGame(BDDMockito.eq("1000"), BDDMockito.refEq(new Game("test-game-name")));
+        BDDMockito.verify(gameService).updateGame(BDDMockito.eq("1000"), BDDMockito.refEq(game("test-game-name")));
     }
 
     @Test
@@ -77,7 +77,7 @@ class GameControllerTest {
     @Test
     void findAllShouldReturnGames() throws Exception {
         BDDMockito
-                .willReturn(List.of(new Game("1000", "mock-name-1"), new Game("2000", "mock-name-2")))
+                .willReturn(List.of(game("1000", "mock-name-1"), game("2000", "mock-name-2")))
                 .given(gameService)
                 .findAll();
 
@@ -99,5 +99,13 @@ class GameControllerTest {
         mvc
                 .perform(get("/rest/v1/games/{id}", "1000"))
                 .andExpect(status().isNotFound());
+    }
+
+    private static Game game(String name) {
+        return Game.builder().withName(name).build();
+    }
+
+    private static Game game(String id, String name) {
+        return Game.builder().withId(id).withName(name).build();
     }
 }
