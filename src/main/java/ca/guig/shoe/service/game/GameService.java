@@ -1,4 +1,4 @@
-package ca.guig.shoe.service;
+package ca.guig.shoe.service.game;
 
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.domain.Player;

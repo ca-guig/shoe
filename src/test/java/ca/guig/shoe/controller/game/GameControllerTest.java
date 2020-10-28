@@ -1,4 +1,4 @@
-package ca.guig.shoe.controller;
+package ca.guig.shoe.controller.game;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,9 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.guig.shoe.controller.Routes;
 import ca.guig.shoe.domain.Game;
-import ca.guig.shoe.service.GameNotFoundException;
-import ca.guig.shoe.service.GameService;
+import ca.guig.shoe.service.game.GameNotFoundException;
+import ca.guig.shoe.service.game.GameService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ class GameControllerTest {
 
         String json = "{\"name\":\"test-game-name\"}";
         mvc
-                .perform(post("/rest/v1/games").contentType(MediaType.APPLICATION_JSON).content(json))
+                .perform(post(Routes.GAME_LIST).contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", "http://localhost/rest/v1/games/1000"));
 
@@ -48,7 +49,7 @@ class GameControllerTest {
         BDDMockito.willReturn(game("1000", "mock-name")).given(gameService).readGame("1000");
 
         mvc
-                .perform(get("/rest/v1/games/{id}", "1000"))
+                .perform(get(Routes.GAME, "1000"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":\"1000\",\"name\":\"mock-name\"}"));
     }
@@ -59,7 +60,7 @@ class GameControllerTest {
 
         String json = "{\"name\":\"test-game-name\"}";
         mvc
-                .perform(put("/rest/v1/games/{id}", "1000").contentType(MediaType.APPLICATION_JSON).content(json))
+                .perform(put(Routes.GAME, "1000").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isNoContent());
 
         BDDMockito.verify(gameService).updateGame(BDDMockito.eq("1000"), BDDMockito.refEq(game("test-game-name")));
@@ -68,7 +69,7 @@ class GameControllerTest {
     @Test
     void deleteShouldDeleteGame() throws Exception {
         mvc
-                .perform(delete("/rest/v1/games/{id}", "1000"))
+                .perform(delete(Routes.GAME, "1000"))
                 .andExpect(status().isNoContent());
 
         BDDMockito.verify(gameService).deleteGame("1000");
@@ -87,7 +88,7 @@ class GameControllerTest {
                 + "  {\"id\":\"2000\",\"name\":\"mock-name-2\"}"
                 + "]";
         mvc
-                .perform(get("/rest/v1/games"))
+                .perform(get(Routes.GAME_LIST))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
     }
@@ -97,7 +98,7 @@ class GameControllerTest {
         BDDMockito.willThrow(new GameNotFoundException()).given(gameService).readGame("1000");
 
         mvc
-                .perform(get("/rest/v1/games/{id}", "1000"))
+                .perform(get(Routes.GAME, "1000"))
                 .andExpect(status().isNotFound());
     }
 

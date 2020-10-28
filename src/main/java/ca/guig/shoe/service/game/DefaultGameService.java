@@ -1,8 +1,9 @@
-package ca.guig.shoe.service;
+package ca.guig.shoe.service.game;
 
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.domain.Player;
-import ca.guig.shoe.repository.GameRepository;
+import ca.guig.shoe.repository.game.GameRepository;
+import ca.guig.shoe.service.IdGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

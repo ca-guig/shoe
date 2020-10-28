@@ -12,11 +12,11 @@ diamonds, with face values of Ace, 2-10, Jack, Queen, and King.
 
 You must provide the following operations: 
  
-- Create and delete a game 
+- ~~Create and delete a game~~ 
 - Create a deck 
 - Add a deck to a game deck 
     - Please note that once a deck has been added to a game deck it cannot be removed. 
-- Add and remove players from a game 
+- ~~Add and remove players from a game~~ 
 - Deal cards to a player in a game from the game deck 
     - Specifically, for a game deck containing only one deck of cards, a call to shuffle followed by 52 calls to 
       dealCards(1) for the same player should result in the caller being provided all 52 cards of the deck in a random 

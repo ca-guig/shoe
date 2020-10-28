@@ -1,4 +1,4 @@
-package ca.guig.shoe.controller;
+package ca.guig.shoe.controller.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

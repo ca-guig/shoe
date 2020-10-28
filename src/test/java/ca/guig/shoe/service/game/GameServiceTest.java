@@ -1,11 +1,12 @@
-package ca.guig.shoe.service;
+package ca.guig.shoe.service.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.domain.Player;
-import ca.guig.shoe.repository.GameRepository;
-import ca.guig.shoe.repository.InMemoryGameRepository;
+import ca.guig.shoe.repository.game.GameRepository;
+import ca.guig.shoe.repository.game.InMemoryGameRepository;
+import ca.guig.shoe.service.IdGenerator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,7 @@ class GameServiceTest {
     }
 
     @Test
-    void readShouldReturnGameWhenGameExist() {
+    void readShouldReturnGameWhenGameExists() {
         given(game("1000", "test-game-name"));
 
         Game game = gameService.readGame("1000");

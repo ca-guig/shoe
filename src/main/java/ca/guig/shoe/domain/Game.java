@@ -2,6 +2,7 @@ package ca.guig.shoe.domain;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
+import ca.guig.shoe.repository.Identifiable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @JsonDeserialize(builder = Game.Builder.class)
-public final class Game {
+public final class Game implements Identifiable {
 
     @JsonProperty(access = READ_ONLY)
     private final String id;
@@ -26,6 +27,7 @@ public final class Game {
         this.players = Map.copyOf(players);
     }
 
+    @Override
     public String getId() {
         return id;
     }

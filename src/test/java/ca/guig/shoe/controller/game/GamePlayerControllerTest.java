@@ -1,11 +1,13 @@
-package ca.guig.shoe.controller;
+package ca.guig.shoe.controller.game;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.guig.shoe.controller.Routes;
+import ca.guig.shoe.controller.game.GamePlayerController;
 import ca.guig.shoe.domain.Player;
-import ca.guig.shoe.service.GameService;
+import ca.guig.shoe.service.game.GameService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ class GamePlayerControllerTest {
     @Test
     void addPlayerShouldAddPlayerToGivenGame() throws Exception {
         mvc
-                .perform(post("/rest/v1/games/{gameId}/players", "1000")
+                .perform(post(Routes.GAME_PLAYER_LIST, "1000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Alice\"}"))
                 .andExpect(status().isCreated());
@@ -37,7 +39,7 @@ class GamePlayerControllerTest {
     @Test
     void removePlayerShouldRemovePlayerFromGivenGame() throws Exception {
         mvc
-                .perform(delete("/rest/v1/games/{gameId}/players/{playerId}", "2000", "9000"))
+                .perform(delete(Routes.GAME_PLAYER, "2000", "9000"))
                 .andExpect(status().isNoContent());
 
         BDDMockito.verify(gameService).removePlayer(BDDMockito.eq("2000"), BDDMockito.eq("9000"));
