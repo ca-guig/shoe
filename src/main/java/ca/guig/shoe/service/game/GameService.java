@@ -21,4 +21,7 @@ public interface GameService {
     void removePlayer(String gameId, String playerId);
 
     void addDeckToShoe(String gameId, String deckId);
+
+    void shuffleShoe(String gameId);
+
 }

@@ -7,6 +7,7 @@ import ca.guig.shoe.domain.Shoe;
 import ca.guig.shoe.repository.game.GameRepository;
 import ca.guig.shoe.service.IdGenerator;
 import ca.guig.shoe.service.deck.DeckService;
+import ca.guig.shoe.utils.CardShuffler;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,6 +83,22 @@ public class DefaultGameService implements GameService {
 
         Shoe.Builder shoeBuilder = fromShoe(game.getShoe());
         shoeBuilder.addCards(deck.getCards());
+
+        Game.Builder gameBuilder = fromGame(readGame(gameId));
+        gameBuilder.withShoe(shoeBuilder.build());
+
+        repository.save(gameBuilder.build());
+    }
+
+    @Override
+    public void shuffleShoe(String gameId) {
+        Game game = readGame(gameId);
+
+        CardShuffler cardShuffler = new CardShuffler(game.getShoe().getCards());
+        cardShuffler.shuffle();
+
+        Shoe.Builder shoeBuilder = fromShoe(game.getShoe());
+        shoeBuilder.withCards(cardShuffler.getCards());
 
         Game.Builder gameBuilder = fromGame(readGame(gameId));
         gameBuilder.withShoe(shoeBuilder.build());

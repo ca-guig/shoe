@@ -12,6 +12,8 @@ public final class Routes {
 
     public static final String GAME_DECK_LIST = GAME + "/decks";
 
+    public static final String GAME_ACTION_LIST = GAME + "/actions";
+
     public static final String GAME_PLAYER_LIST = GAME + "/players";
     public static final String GAME_PLAYER = GAME_PLAYER_LIST + "/{playerId}";
 

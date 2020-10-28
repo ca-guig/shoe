@@ -188,6 +188,35 @@ class GameServiceTest {
                         DeckCard.builder().withId("9000-4").withValue(Card.ACE_OF_DIAMONDS).build());
     }
 
+    @Test
+    void shuffleShoeShouldShuffleAllCards() {
+        given(game("3000", "game-deck-test"));
+        givenToGame("3000", deckOfAces("8888"));
+        givenToGame("3000", deckOfAces("9999"));
+
+        gameService.shuffleShoe("3000");
+
+        assertThat(gameService.readGame("3000").getShoe().getCards())
+                .containsExactlyInAnyOrder(
+                        DeckCard.builder().withId("8888-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("8888-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("8888-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("8888-4").withValue(Card.ACE_OF_DIAMONDS).build(),
+                        DeckCard.builder().withId("9999-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("9999-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("9999-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("9999-4").withValue(Card.ACE_OF_DIAMONDS).build())
+                .doesNotContainSequence(
+                        DeckCard.builder().withId("8888-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("8888-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("8888-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("8888-4").withValue(Card.ACE_OF_DIAMONDS).build(),
+                        DeckCard.builder().withId("9999-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("9999-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("9999-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("9999-4").withValue(Card.ACE_OF_DIAMONDS).build());
+    }
+
     private void given(Game game) {
         BDDMockito.willReturn(game.getId()).given(idGenerator).generateId();
         gameService.createGame(game);
