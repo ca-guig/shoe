@@ -10,6 +10,8 @@ public final class Routes {
     public static final String GAME_LIST = BASE_PATH + "/v1/games";
     public static final String GAME = GAME_LIST + "/{gameId}";
 
+    public static final String GAME_DECK_LIST = GAME + "/decks";
+
     public static final String GAME_PLAYER_LIST = GAME + "/players";
     public static final String GAME_PLAYER = GAME_PLAYER_LIST + "/{playerId}";
 

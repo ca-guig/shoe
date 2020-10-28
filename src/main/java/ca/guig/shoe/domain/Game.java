@@ -19,12 +19,16 @@ public final class Game implements Identifiable {
     private final String name;
 
     @JsonProperty(access = READ_ONLY)
+    private final Shoe shoe;
+
+    @JsonProperty(access = READ_ONLY)
     private final Map<String, Player> players;
 
-    private Game(String id, String name, Map<String, Player> players) {
+    public Game(String id, String name, Shoe shoe, Map<String, Player> players) {
         this.id = id;
         this.name = name;
-        this.players = Map.copyOf(players);
+        this.shoe = shoe;
+        this.players = players;
     }
 
     @Override
@@ -34,6 +38,10 @@ public final class Game implements Identifiable {
 
     public String getName() {
         return name;
+    }
+
+    public Shoe getShoe() {
+        return shoe;
     }
 
     public Map<String, Player> getPlayers() {
@@ -51,12 +59,13 @@ public final class Game implements Identifiable {
         Game game = (Game) o;
         return Objects.equals(id, game.id)
                 && Objects.equals(name, game.name)
+                && Objects.equals(shoe, game.shoe)
                 && Objects.equals(players, game.players);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, players);
+        return Objects.hash(id, name, shoe, players);
     }
 
     @Override
@@ -64,6 +73,7 @@ public final class Game implements Identifiable {
         return "Game{"
                 + "id='" + id + '\''
                 + ", name='" + name + '\''
+                + ", shoe=" + shoe
                 + ", players=" + players
                 + '}';
     }
@@ -77,6 +87,8 @@ public final class Game implements Identifiable {
 
         private String name;
 
+        private Shoe shoe;
+
         private final Map<String, Player> players = new HashMap<>();
 
         public Builder withId(final String id) {
@@ -86,6 +98,11 @@ public final class Game implements Identifiable {
 
         public Builder withName(final String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder withShoe(final Shoe shoe) {
+            this.shoe = shoe;
             return this;
         }
 
@@ -106,7 +123,7 @@ public final class Game implements Identifiable {
         }
 
         public Game build() {
-            return new Game(id, name, players);
+            return new Game(id, name, shoe, players);
         }
     }
 }

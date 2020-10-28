@@ -13,7 +13,7 @@ diamonds, with face values of Ace, 2-10, Jack, Queen, and King.
 You must provide the following operations: 
  
 - ~~Create and delete a game~~ 
-- Create a deck 
+- ~~Create a deck~~ 
 - Add a deck to a game deck 
     - Please note that once a deck has been added to a game deck it cannot be removed. 
 - ~~Add and remove players from a game~~ 

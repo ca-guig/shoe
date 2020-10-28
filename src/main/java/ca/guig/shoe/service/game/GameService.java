@@ -19,4 +19,6 @@ public interface GameService {
     void addPlayer(String gameId, Player player);
 
     void removePlayer(String gameId, String playerId);
+
+    void addDeckToShoe(String gameId, String deckId);
 }

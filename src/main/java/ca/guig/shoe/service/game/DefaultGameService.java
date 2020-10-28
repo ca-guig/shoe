@@ -1,9 +1,12 @@
 package ca.guig.shoe.service.game;
 
+import ca.guig.shoe.domain.Deck;
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.domain.Player;
+import ca.guig.shoe.domain.Shoe;
 import ca.guig.shoe.repository.game.GameRepository;
 import ca.guig.shoe.service.IdGenerator;
+import ca.guig.shoe.service.deck.DeckService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,16 +16,23 @@ public class DefaultGameService implements GameService {
 
     private final GameRepository repository;
 
+    private final DeckService deckService;
+
     private final IdGenerator idGenerator;
 
-    public DefaultGameService(GameRepository repository, IdGenerator idGenerator) {
+    public DefaultGameService(GameRepository repository, DeckService deckService, IdGenerator idGenerator) {
         this.repository = repository;
+        this.deckService = deckService;
         this.idGenerator = idGenerator;
     }
 
     @Override
     public Game createGame(Game game) {
-        Game copiedGame = Game.builder().withId(idGenerator.generateId()).withName(game.getName()).build();
+        Game copiedGame = Game.builder()
+                .withId(idGenerator.generateId())
+                .withName(game.getName())
+                .withShoe(Shoe.builder().build())
+                .build();
         return repository.save(copiedGame);
     }
 
@@ -65,7 +75,29 @@ public class DefaultGameService implements GameService {
         repository.save(gameBuilder.build());
     }
 
+    @Override
+    public void addDeckToShoe(String gameId, String deckId) {
+        Game game = readGame(gameId);
+        Deck deck = deckService.readDeck(deckId);
+
+        Shoe.Builder shoeBuilder = fromShoe(game.getShoe());
+        shoeBuilder.addCards(deck.getCards());
+
+        Game.Builder gameBuilder = fromGame(readGame(gameId));
+        gameBuilder.withShoe(shoeBuilder.build());
+
+        repository.save(gameBuilder.build());
+    }
+
     private static Game.Builder fromGame(Game game) {
-        return Game.builder().withId(game.getId()).withName(game.getName()).withPlayers(game.getPlayers());
+        return Game.builder()
+                .withId(game.getId())
+                .withName(game.getName())
+                .withShoe(game.getShoe())
+                .withPlayers(game.getPlayers());
+    }
+
+    private static Shoe.Builder fromShoe(Shoe shoe) {
+        return Shoe.builder().withCards(shoe.getCards());
     }
 }

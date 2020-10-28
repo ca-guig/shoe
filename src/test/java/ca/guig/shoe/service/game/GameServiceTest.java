@@ -2,11 +2,16 @@ package ca.guig.shoe.service.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ca.guig.shoe.domain.Card;
+import ca.guig.shoe.domain.Deck;
+import ca.guig.shoe.domain.DeckCard;
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.domain.Player;
+import ca.guig.shoe.domain.Shoe;
 import ca.guig.shoe.repository.game.GameRepository;
 import ca.guig.shoe.repository.game.InMemoryGameRepository;
 import ca.guig.shoe.service.IdGenerator;
+import ca.guig.shoe.service.deck.DeckService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +22,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 class GameServiceTest {
@@ -28,6 +31,9 @@ class GameServiceTest {
 
     @Spy
     private final GameRepository gameRepository = new InMemoryGameRepository();
+
+    @Mock
+    private DeckService deckService;
 
     @Mock
     private IdGenerator idGenerator;
@@ -147,6 +153,41 @@ class GameServiceTest {
                 .containsEntry("9002", player("9002", "Bobby"));
     }
 
+    @Test
+    void addDeckToShoeShouldAddAllCardsToShoe() {
+        given(game("3000", "game-deck-test"));
+        given(deckOfAces("9000"));
+
+        gameService.addDeckToShoe("3000", "9000");
+
+        assertThat(gameService.readGame("3000").getShoe().getCards())
+                .containsExactly(
+                        DeckCard.builder().withId("9000-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("9000-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("9000-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("9000-4").withValue(Card.ACE_OF_DIAMONDS).build());
+    }
+
+    @Test
+    void addDeckToShoeShouldAppendAllCardsToShoeWhenThereIsAlreadyCards() {
+        given(game("3000", "game-deck-test"));
+        givenToGame("3000", deckOfAces("8000"));
+        given(deckOfAces("9000"));
+
+        gameService.addDeckToShoe("3000", "9000");
+
+        assertThat(gameService.readGame("3000").getShoe().getCards())
+                .containsExactly(
+                        DeckCard.builder().withId("8000-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("8000-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("8000-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("8000-4").withValue(Card.ACE_OF_DIAMONDS).build(),
+                        DeckCard.builder().withId("9000-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("9000-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId("9000-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("9000-4").withValue(Card.ACE_OF_DIAMONDS).build());
+    }
+
     private void given(Game game) {
         BDDMockito.willReturn(game.getId()).given(idGenerator).generateId();
         gameService.createGame(game);
@@ -159,6 +200,10 @@ class GameServiceTest {
         }
     }
 
+    private void given(Deck deck) {
+        BDDMockito.willReturn(deck).given(deckService).readDeck(deck.getId());
+    }
+
     private void givenToGame(String gameId, Player... players) {
         for (Player player : players) {
             BDDMockito.willReturn(player.getId()).given(idGenerator).generateId();
@@ -166,20 +211,17 @@ class GameServiceTest {
         }
     }
 
+    private void givenToGame(String gameId, Deck deck) {
+        given(deck);
+        gameService.addDeckToShoe(gameId, deck.getId());
+    }
+
     private static Game game(String name) {
         return Game.builder().withName(name).build();
     }
 
     private static Game game(String id, String name) {
-        return Game.builder().withId(id).withName(name).build();
-    }
-
-    private static Game game(String id, String name, List<Player> players) {
-        return Game.builder()
-                .withId(id)
-                .withName(name)
-                .withPlayers(players.stream().collect(Collectors.toMap(Player::getId, Function.identity())))
-                .build();
+        return Game.builder().withId(id).withName(name).withShoe(Shoe.builder().build()).build();
     }
 
     private static Player player(String name) {
@@ -188,5 +230,18 @@ class GameServiceTest {
 
     private static Player player(String id, String name) {
         return Player.builder().withId(id).withName(name).build();
+    }
+
+    private static Deck deckOfAces(String id) {
+        return Deck.builder()
+                .withId(id)
+                .withColor("green")
+                .withCards(List.of(
+                        DeckCard.builder().withId(id + "-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId(id + "-2").withValue(Card.ACE_OF_SPADES).build(),
+                        DeckCard.builder().withId(id + "-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId(id + "-4").withValue(Card.ACE_OF_DIAMONDS).build()
+                ))
+                .build();
     }
 }
