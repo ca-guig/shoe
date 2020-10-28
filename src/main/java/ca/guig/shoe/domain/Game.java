@@ -3,6 +3,7 @@ package ca.guig.shoe.domain;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 import ca.guig.shoe.repository.Identifiable;
+import ca.guig.shoe.utils.PlayerSorter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -29,7 +30,8 @@ public final class Game implements Identifiable {
         this.id = id;
         this.name = name;
         this.shoe = shoe;
-        this.players = players;
+        players.sort(new PlayerSorter());
+        this.players = List.copyOf(players);
     }
 
     @Override
