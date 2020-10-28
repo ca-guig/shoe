@@ -68,6 +68,10 @@ public final class Deck implements Identifiable {
                 + '}';
     }
 
+    public Builder toBuilder() {
+        return new Builder(id, color, cards);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -78,6 +82,28 @@ public final class Deck implements Identifiable {
         private String color;
 
         private final List<DeckCard> cards = new ArrayList<>();
+
+        public Builder() {}
+
+        private Builder(String id, String color, List<DeckCard> cards) {
+            this.id = id;
+            this.color = color;
+            if (cards != null) {
+                this.cards.addAll(cards);
+            }
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
+        public List<DeckCard> getCards() {
+            return cards;
+        }
 
         public Builder withId(final String id) {
             this.id = id;

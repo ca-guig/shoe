@@ -23,7 +23,7 @@ public class GameActionControllerTest {
     private MockMvc mvc;
 
     @Test
-    void createActionShouldDoShuffleWhenActionTypeIsShuffle() throws Exception {
+    void createActionShouldShuffleShoeWhenActionTypeIsShuffle() throws Exception {
         mvc
                 .perform(post(Routes.GAME_ACTION_LIST, "1000")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -31,5 +31,16 @@ public class GameActionControllerTest {
                 .andExpect(status().isCreated());
 
         BDDMockito.verify(gameService).shuffleShoe("1000");
+    }
+
+    @Test
+    void createActionShouldDealCardsWhenActionTypeIsDealCards() throws Exception {
+        mvc
+                .perform(post(Routes.GAME_ACTION_LIST, "1000")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"type\":\"DEAL_CARDS\",\"playerId\":\"1234\",\"numberOfCards\":12}"))
+                .andExpect(status().isCreated());
+
+        BDDMockito.verify(gameService).dealCards("1000", "1234", 12);
     }
 }

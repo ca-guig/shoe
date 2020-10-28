@@ -6,8 +6,9 @@ import ca.guig.shoe.repository.Identifiable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 @JsonDeserialize(builder = Game.Builder.class)
@@ -22,9 +23,9 @@ public final class Game implements Identifiable {
     private final Shoe shoe;
 
     @JsonProperty(access = READ_ONLY)
-    private final Map<String, Player> players;
+    private final List<Player> players;
 
-    public Game(String id, String name, Shoe shoe, Map<String, Player> players) {
+    public Game(String id, String name, Shoe shoe, List<Player> players) {
         this.id = id;
         this.name = name;
         this.shoe = shoe;
@@ -44,7 +45,7 @@ public final class Game implements Identifiable {
         return shoe;
     }
 
-    public Map<String, Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -78,6 +79,10 @@ public final class Game implements Identifiable {
                 + '}';
     }
 
+    public Builder toBuilder() {
+        return new Builder(id, name, shoe, players);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -87,9 +92,41 @@ public final class Game implements Identifiable {
 
         private String name;
 
-        private Shoe shoe;
+        private Shoe shoe = Shoe.builder().build();
 
-        private final Map<String, Player> players = new HashMap<>();
+        private final List<Player> players = new ArrayList<>();
+
+        public Builder() {}
+
+        private Builder(String id, String name, Shoe shoe, List<Player> players) {
+            this.id = id;
+            this.name = name;
+            this.shoe = shoe != null ? shoe : Shoe.builder().build();
+            if (players != null) {
+                this.players.addAll(players);
+            }
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Shoe getShoe() {
+            return shoe;
+        }
+
+        public Player getPlayer(String playerId) {
+            for (Player player : players) {
+                if (player.getId().equals(playerId)) {
+                    return player;
+                }
+            }
+            return null;
+        }
 
         public Builder withId(final String id) {
             this.id = id;
@@ -106,19 +143,32 @@ public final class Game implements Identifiable {
             return this;
         }
 
-        public Builder withPlayers(final Map<String, Player> players) {
+        public Builder withPlayers(final List<Player> players) {
             this.players.clear();
-            this.players.putAll(players);
+            this.players.addAll(players);
             return this;
         }
 
         public Builder addPlayer(Player player) {
-            this.players.put(player.getId(), player);
+            this.players.add(player);
+            return this;
+        }
+
+        public Builder updatePlayer(Player player) {
+            removePlayer(player.getId());
+            addPlayer(player);
             return this;
         }
 
         public Builder removePlayer(String playerId) {
-            this.players.remove(playerId);
+            Iterator<Player> iterator = this.players.iterator();
+            while (iterator.hasNext()) {
+                Player player = iterator.next();
+                if (player.getId().equals(playerId)) {
+                    iterator.remove();
+                    break;
+                }
+            }
             return this;
         }
 

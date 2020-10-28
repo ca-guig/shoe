@@ -14,8 +14,8 @@ You must provide the following operations:
  
 - ~~Create and delete a game~~ 
 - ~~Create a deck~~ 
-- Add a deck to a game deck 
-    - Please note that once a deck has been added to a game deck it cannot be removed. 
+- ~~Add a deck to a game deck~~ 
+    - ~~Please note that once a deck has been added to a game deck it cannot be removed.~~ 
 - ~~Add and remove players from a game~~ 
 - Deal cards to a player in a game from the game deck 
     - Specifically, for a game deck containing only one deck of cards, a call to shuffle followed by 52 calls to 
@@ -31,11 +31,11 @@ You must provide the following operations:
 - Get the count of how many cards per suit are left undealt in the game deck (example: 5 hearts, 3 spades, etc.) 
 - Get the count of each card (suit and value) remaining in the game deck sorted by suit ( hearts, spades, clubs, 
   and diamonds) and face value from high value to low value (King, Queen, Jack, 10….2, Ace with value of 1) 
-- Shuffle the game deck (shoe) 
-    - Shuffle returns no value, but results in the cards in the game deck being randomly permuted. Please do not use 
+- ~~Shuffle the game deck (shoe)~~ 
+    - ~~Shuffle returns no value, but results in the cards in the game deck being randomly permuted. Please do not use 
       library-provided “shuffle” operations to implement this function. You may use library- provided random number 
-      generators in your solution. 
-    - Shuffle can be called at any time 
+      generators in your solution.~~ 
+    - ~~Shuffle can be called at any time~~ 
  
 The structure of the REST API is up to you but please consider the combination of resources and actions represented by 
 this problem and make appropriate tradeoffs in compliance to strict REST doctrine. 

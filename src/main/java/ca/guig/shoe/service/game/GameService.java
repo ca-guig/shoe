@@ -24,4 +24,5 @@ public interface GameService {
 
     void shuffleShoe(String gameId);
 
+    void dealCards(String gameId, String playerId, int numberOfCards);
 }

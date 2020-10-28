@@ -15,9 +15,12 @@ public final class Player {
 
     private final String name;
 
-    private Player(String id, String name) {
+    private final PlayerHand hand;
+
+    private Player(String id, String name, PlayerHand hand) {
         this.id = id;
         this.name = name;
+        this.hand = hand;
     }
 
     public String getId() {
@@ -26,6 +29,10 @@ public final class Player {
 
     public String getName() {
         return name;
+    }
+
+    public PlayerHand getHand() {
+        return hand;
     }
 
     @Override
@@ -54,6 +61,10 @@ public final class Player {
                 + '}';
     }
 
+    public Builder toBuilder() {
+        return new Builder(id, name, hand);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -62,6 +73,28 @@ public final class Player {
         private String id;
 
         private String name;
+
+        private PlayerHand hand = PlayerHand.builder().build();
+
+        public Builder() {}
+
+        private Builder(String id, String name, PlayerHand hand) {
+            this.id = id;
+            this.name = name;
+            this.hand = hand != null ? hand : PlayerHand.builder().build();
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public PlayerHand getHand() {
+            return hand;
+        }
 
         public Builder withId(final String id) {
             this.id = id;
@@ -73,8 +106,13 @@ public final class Player {
             return this;
         }
 
+        public Builder withHand(final PlayerHand hand) {
+            this.hand = hand;
+            return this;
+        }
+
         public Player build() {
-            return new Player(id, name);
+            return new Player(id, name, hand);
         }
     }
 }

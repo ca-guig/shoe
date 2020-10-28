@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class Shoe {
+public final class PlayerHand {
 
     private final List<DeckCard> cards;
 
-    private Shoe(List<DeckCard> cards) {
+    private PlayerHand(List<DeckCard> cards) {
         this.cards = List.copyOf(cards);
     }
 
@@ -24,8 +24,8 @@ public final class Shoe {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Shoe shoe = (Shoe) o;
-        return Objects.equals(cards, shoe.cards);
+        PlayerHand that = (PlayerHand) o;
+        return Objects.equals(cards, that.cards);
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class Shoe {
 
     @Override
     public String toString() {
-        return "Shoe{"
+        return "PlayerHand{"
                 + "cards=" + cards
                 + '}';
     }
@@ -48,7 +48,7 @@ public final class Shoe {
         return new Builder();
     }
 
-    public static class Builder {
+    public static final class Builder {
 
         private final List<DeckCard> cards = new ArrayList<>();
 
@@ -70,8 +70,8 @@ public final class Shoe {
             return this;
         }
 
-        public Shoe build() {
-            return new Shoe(cards);
+        public PlayerHand build() {
+            return new PlayerHand(cards);
         }
     }
 }

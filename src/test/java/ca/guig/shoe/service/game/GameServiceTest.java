@@ -123,7 +123,7 @@ class GameServiceTest {
 
         assertThat(gameService.readGame("1000").getPlayers())
                 .hasSize(1)
-                .containsEntry("9000", player("9000", "Alice"));
+                .contains(player("9000", "Alice"));
     }
 
     @Test
@@ -136,9 +136,9 @@ class GameServiceTest {
 
         assertThat(gameService.readGame("2000").getPlayers())
                 .hasSize(3)
-                .containsEntry("9001", player("9001", "Alice"))
-                .containsEntry("9002", player("9002", "Bobby"))
-                .containsEntry("5000", player("5000", "Carol"));
+                .contains(player("9001", "Alice"))
+                .contains(player("9002", "Bobby"))
+                .contains(player("5000", "Carol"));
     }
 
     @Test
@@ -150,7 +150,7 @@ class GameServiceTest {
 
         assertThat(gameService.readGame("2000").getPlayers())
                 .hasSize(1)
-                .containsEntry("9002", player("9002", "Bobby"));
+                .contains(player("9002", "Bobby"));
     }
 
     @Test
@@ -215,6 +215,25 @@ class GameServiceTest {
                         DeckCard.builder().withId("9999-2").withValue(Card.ACE_OF_SPADES).build(),
                         DeckCard.builder().withId("9999-3").withValue(Card.ACE_OF_CLUBS).build(),
                         DeckCard.builder().withId("9999-4").withValue(Card.ACE_OF_DIAMONDS).build());
+    }
+
+    @Test
+    void dealCardsShouldDealCardToPlayerHand() {
+        given(game("3000", "game-deck-test"));
+        givenToGame("3000", player("9001", "Alice"));
+        givenToGame("3000", deckOfAces("8888"));
+
+        gameService.dealCards("3000", "9001", 2);
+
+        Game game = gameService.readGame("3000");
+        assertThat(game.getPlayers().get(0).getHand().getCards())
+                .containsExactlyInAnyOrder(
+                        DeckCard.builder().withId("8888-1").withValue(Card.ACE_OF_HEARTS).build(),
+                        DeckCard.builder().withId("8888-2").withValue(Card.ACE_OF_SPADES).build());
+        assertThat(game.getShoe().getCards())
+                .containsExactly(
+                        DeckCard.builder().withId("8888-3").withValue(Card.ACE_OF_CLUBS).build(),
+                        DeckCard.builder().withId("8888-4").withValue(Card.ACE_OF_DIAMONDS).build());
     }
 
     private void given(Game game) {
