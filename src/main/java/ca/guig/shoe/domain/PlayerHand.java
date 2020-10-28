@@ -1,5 +1,7 @@
 package ca.guig.shoe.domain;
 
+import ca.guig.shoe.utils.HandEvaluator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,12 +10,19 @@ public final class PlayerHand {
 
     private final List<DeckCard> cards;
 
+    private final int value;
+
     private PlayerHand(List<DeckCard> cards) {
         this.cards = List.copyOf(cards);
+        this.value = HandEvaluator.calculateValue(this.cards);
     }
 
     public List<DeckCard> getCards() {
         return cards;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     @Override
