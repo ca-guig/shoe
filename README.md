@@ -23,11 +23,11 @@ You must provide the following operations:
       order. If the caller then makes a 53rd call to dealCard(1), no card is dealt. This approach is to be followed if 
       the game deck contains more than one deck.~~ 
 - ~~Get the list of cards for a player~~ 
-- Get the list of players in a game along with the total added value of all the cards each player holds; use face 
+- ~~Get the list of players in a game along with the total added value of all the cards each player holds; use face 
   values of cards only. Then sort the list in descending order, from the player with the highest value hand to the 
-  player with the lowest value hand: 
-    - For instance if player ‘A’ holds a 10 + King then her total value is 23 and player ‘B’ holds a 7 + Queen then his 
-      total value is 19,  so player ‘A’ will be listed first followed by player ‘B’. 
+  player with the lowest value hand:~~ 
+    - ~~For instance if player ‘A’ holds a 10 + King then her total value is 23 and player ‘B’ holds a 7 + Queen then his 
+      total value is 19,  so player ‘A’ will be listed first followed by player ‘B’.~~ 
 - Get the count of how many cards per suit are left undealt in the game deck (example: 5 hearts, 3 spades, etc.) 
 - Get the count of each card (suit and value) remaining in the game deck sorted by suit ( hearts, spades, clubs, 
   and diamonds) and face value from high value to low value (King, Queen, Jack, 10….2, Ace with value of 1) 
@@ -47,6 +47,13 @@ While this is a trivial assignment, pretend that this code will become a foundat
 whatever measures you feel are required for your code to meet this bar within the scope of the allotted time and be 
 prepared to discuss the tradeoffs you made.
 
+### Missing
+
+- Shoe statistics (from requirements)
+- Few tests (ex: error handling such GameNotFoundException)
+- Input validations (Should be done with Spring Validation)
+- JPA (for the persistence of the data)
+
 ## Build and Run the application
 
 Run the tests
@@ -57,4 +64,113 @@ Run the tests
 Start the application
 ```
 ./gradlew bootRun
+```
+
+## REST API
+
+### Create a deck
+
+```
+POST http://localhost:8080/rest/v1/decks
+
+{
+  "color": "red"
+}
+```
+
+### Create a game
+
+```
+POST http://localhost:8080/rest/v1/games
+
+{
+  "name": "<game-name>"
+}
+```
+
+### Get a game
+
+```
+GET http://localhost:8080/rest/v1/games/{gameId}
+```
+
+#### Example
+```
+{
+  "id": "1000",
+  "name": "test-game",
+  "shoe": {
+    "cards": [
+      { "id": "34", value: "ACE_OF_SPADES" },
+      { "id": "75", value: "QUEEN_OF_HEARTS" },
+      ... 
+    ]
+  },
+  "players": [
+    {
+      "id": "100",
+      "name": "Alice",
+      "hand": {
+        "value": 23,
+        "cards": [
+          { "id": "93", value: "TEN_OF_SPADES" },
+          { "id": "21", value: "KING_OF_HEARTS" },          
+        ]
+      }
+    },
+    {
+      "id": "200",
+      "name": "Bobby",
+      "hand": {
+        "value": 4,
+        "cards": [
+          { "id": "37", value: "THREE_OF_CLUBS" },
+          { "id": "41", value: "ACE_OF_DIAMONDS" },          
+        ]
+      }
+    },
+  ]
+}
+```
+
+### Add a deck to a game
+
+```
+POST http://localhost:8080/rest/v1/games/{gameId}/decks
+
+{
+  "deckId": "<deck-id>"
+}
+```
+
+### Add a player to a game
+
+```
+POST http://localhost:8080/rest/v1/games/{gameId}/players
+
+{
+  "name": "<player-name>"
+}
+```
+
+### Shuffle a game shoe
+
+```
+POST http://localhost:8080/rest/v1/games/{gameId}/actions
+
+{
+  "type": "SHUFFLE_SHOE"
+}
+```
+
+### Deal cards to a player
+
+```
+POST http://localhost:8080/rest/v1/games/{gameId}/actions
+
+{
+  "type": "DEAL_CARDS",
+  "playerId": "<player-id>",
+  "numberOfCards": 999
+}
 ```

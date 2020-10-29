@@ -2,12 +2,10 @@ package ca.guig.shoe.controller.game;
 
 import ca.guig.shoe.controller.Routes;
 import ca.guig.shoe.domain.Game;
-import ca.guig.shoe.service.game.GameNotFoundException;
 import ca.guig.shoe.service.game.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,10 +53,6 @@ public class GameController {
     public void delete(@PathVariable String gameId) {
         service.deleteGame(gameId);
     }
-
-    @ExceptionHandler(GameNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleGameNotFoundException() {}
 
     private static URI buildLocation(Game game) {
         return ServletUriComponentsBuilder.fromCurrentServletMapping().path("/rest/v1/games/{id}").build(game.getId());
