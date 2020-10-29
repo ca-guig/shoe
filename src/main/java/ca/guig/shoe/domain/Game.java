@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import ca.guig.shoe.repository.Identifiable;
 import ca.guig.shoe.utils.PlayerSorter;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -101,6 +102,7 @@ public final class Game implements Identifiable {
 
         public Builder() {}
 
+        @JsonCreator
         private Builder(String id, String name, Shoe shoe, List<Player> players) {
             this.id = id;
             this.name = name;

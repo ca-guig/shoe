@@ -3,6 +3,7 @@ package ca.guig.shoe.domain;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 import ca.guig.shoe.repository.Identifiable;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -85,6 +86,7 @@ public final class Deck implements Identifiable {
 
         public Builder() {}
 
+        @JsonCreator
         private Builder(String id, String color, List<DeckCard> cards) {
             this.id = id;
             this.color = color;

@@ -98,23 +98,23 @@ public class DefaultGameService implements GameService {
 
     @Override
     public void dealCards(String gameId, String playerId, int numberOfCards) {
-        Game.Builder game = readGame(gameId).toBuilder();
+        Game.Builder gameBuilder = readGame(gameId).toBuilder();
 
         if (numberOfCards == 0) {
             return;
         }
 
-        Player.Builder player = game.getPlayer(playerId);
+        Player.Builder player = gameBuilder.getPlayer(playerId);
         if (player == null) {
             return;
         }
 
         CardDealer cardDealer = new CardDealer(
-                game.getShoe().getCards(),
+                gameBuilder.getShoe().getCards(),
                 player.getHand().getCards(),
                 numberOfCards);
         cardDealer.deal();
 
-        repository.save(game.build());
+        repository.save(gameBuilder.build());
     }
 }

@@ -3,11 +3,9 @@ package ca.guig.shoe.domain;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.Objects;
 
-@JsonDeserialize(builder = DeckCard.Builder.class)
 public final class DeckCard {
 
     @JsonProperty(access = READ_ONLY)

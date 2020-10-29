@@ -2,6 +2,7 @@ package ca.guig.shoe.domain;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -80,6 +81,7 @@ public final class Player {
 
         public Builder() {}
 
+        @JsonCreator
         private Builder(String id, String name, PlayerHand hand) {
             this.id = id;
             this.name = name;
