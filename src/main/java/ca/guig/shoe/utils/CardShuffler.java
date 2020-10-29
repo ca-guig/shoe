@@ -3,7 +3,6 @@ package ca.guig.shoe.utils;
 import ca.guig.shoe.domain.DeckCard;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,20 +13,15 @@ public class CardShuffler {
     private List<DeckCard> cards;
 
     public CardShuffler(List<DeckCard> cards) {
-        this.cards = new ArrayList<>(cards);
+        this.cards = cards;
     }
 
     public void shuffle() {
-        List<DeckCard> shuffledCards = new LinkedList<>();
+        List<DeckCard> originalCards = new ArrayList<>(cards);
 
-        for (DeckCard card : cards) {
-            shuffledCards.add(random.nextInt(shuffledCards.size() + 1), card);
+        cards.clear();
+        for (DeckCard card : originalCards) {
+            cards.add(random.nextInt(cards.size() + 1), card);
         }
-
-        this.cards = shuffledCards;
-    }
-
-    public List<DeckCard> getCards() {
-        return cards;
     }
 }

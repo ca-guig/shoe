@@ -10,6 +10,7 @@ import ca.guig.shoe.domain.DeckCard;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,13 +24,13 @@ class CardShufflerTest {
                 .stream(Card.values())
                 .map((card) -> DeckCard.builder().withId("mock").withValue(card).build())
                 .collect(toList());
+        List<DeckCard> originalCards = new ArrayList<>(cards);
 
         CardShuffler shuffler = new CardShuffler(cards);
         shuffler.shuffle();
 
-        List<DeckCard> shuffledCards = shuffler.getCards();
-        assertThat(shuffledCards)
+        assertThat(cards)
                 .hasSize(cards.size())
-                .isNotEqualTo(cards);
+                .isNotEqualTo(originalCards);
     }
 }

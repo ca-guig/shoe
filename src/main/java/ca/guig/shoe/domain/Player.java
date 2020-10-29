@@ -76,14 +76,14 @@ public final class Player {
 
         private String name;
 
-        private PlayerHand hand = PlayerHand.builder().build();
+        private PlayerHand.Builder hand = PlayerHand.builder();
 
         public Builder() {}
 
         private Builder(String id, String name, PlayerHand hand) {
             this.id = id;
             this.name = name;
-            this.hand = hand != null ? hand : PlayerHand.builder().build();
+            this.hand = hand != null ? hand.toBuilder() : PlayerHand.builder();
         }
 
         public String getId() {
@@ -94,7 +94,7 @@ public final class Player {
             return name;
         }
 
-        public PlayerHand getHand() {
+        public PlayerHand.Builder getHand() {
             return hand;
         }
 
@@ -109,12 +109,12 @@ public final class Player {
         }
 
         public Builder withHand(final PlayerHand hand) {
-            this.hand = hand;
+            this.hand = hand.toBuilder();
             return this;
         }
 
         public Player build() {
-            return new Player(id, name, hand);
+            return new Player(id, name, hand.build());
         }
     }
 }

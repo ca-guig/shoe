@@ -3,8 +3,6 @@ package ca.guig.shoe.service.game;
 import ca.guig.shoe.domain.Deck;
 import ca.guig.shoe.domain.Game;
 import ca.guig.shoe.domain.Player;
-import ca.guig.shoe.domain.PlayerHand;
-import ca.guig.shoe.domain.Shoe;
 import ca.guig.shoe.repository.game.GameRepository;
 import ca.guig.shoe.service.IdGenerator;
 import ca.guig.shoe.service.deck.DeckService;
@@ -31,11 +29,10 @@ public class DefaultGameService implements GameService {
 
     @Override
     public Game createGame(Game game) {
-        Game copiedGame = Game.builder()
+        Game.Builder newGame = Game.builder()
                 .withId(idGenerator.generateId())
-                .withName(game.getName())
-                .build();
-        return repository.save(copiedGame);
+                .withName(game.getName());
+        return repository.save(newGame.build());
     }
 
     @Override
@@ -49,8 +46,9 @@ public class DefaultGameService implements GameService {
 
     @Override
     public Game updateGame(String gameId, Game game) {
-        Game.Builder gameBuilder = readGame(gameId).toBuilder();
-        return repository.save(gameBuilder.withName(game.getName()).build());
+        Game.Builder updateGame = readGame(gameId).toBuilder();
+        updateGame.withName(game.getName());
+        return repository.save(updateGame.build());
     }
 
     @Override
@@ -65,72 +63,58 @@ public class DefaultGameService implements GameService {
 
     @Override
     public void addPlayer(String gameId, Player player) {
-        Game.Builder gameBuilder = readGame(gameId).toBuilder();
-        gameBuilder.addPlayer(Player.builder().withId(idGenerator.generateId()).withName(player.getName()).build());
-        repository.save(gameBuilder.build());
+        Game.Builder game = readGame(gameId).toBuilder();
+        game.addPlayer(Player.builder().withId(idGenerator.generateId()).withName(player.getName()).build());
+        repository.save(game.build());
     }
 
     @Override
     public void removePlayer(String gameId, String playerId) {
-        Game.Builder gameBuilder = readGame(gameId).toBuilder();
-        gameBuilder.removePlayer(playerId);
-        repository.save(gameBuilder.build());
+        Game.Builder game = readGame(gameId).toBuilder();
+        game.removePlayer(playerId);
+        repository.save(game.build());
     }
 
     @Override
     public void addDeckToShoe(String gameId, String deckId) {
-        Game.Builder gameBuilder = readGame(gameId).toBuilder();
+        Game.Builder game = readGame(gameId).toBuilder();
+
         Deck deck = deckService.readDeck(deckId);
 
-        Shoe.Builder shoeBuilder = gameBuilder.getShoe().toBuilder();
-        shoeBuilder.getCards().addAll(deck.getCards());
+        game.getShoe().getCards().addAll(deck.getCards());
 
-        gameBuilder.withShoe(shoeBuilder.build());
-
-        repository.save(gameBuilder.build());
+        repository.save(game.build());
     }
 
     @Override
     public void shuffleShoe(String gameId) {
-        Game.Builder gameBuilder = readGame(gameId).toBuilder();
-        Shoe.Builder shoeBuilder = gameBuilder.getShoe().toBuilder();
+        Game.Builder game = readGame(gameId).toBuilder();
 
-        CardShuffler cardShuffler = new CardShuffler(shoeBuilder.getCards());
+        CardShuffler cardShuffler = new CardShuffler(game.getShoe().getCards());
         cardShuffler.shuffle();
 
-        shoeBuilder.withCards(cardShuffler.getCards());
-
-        gameBuilder.withShoe(shoeBuilder.build());
-
-        repository.save(gameBuilder.build());
+        repository.save(game.build());
     }
 
     @Override
     public void dealCards(String gameId, String playerId, int numberOfCards) {
-        Game.Builder gameBuilder = readGame(gameId).toBuilder();
+        Game.Builder game = readGame(gameId).toBuilder();
 
         if (numberOfCards == 0) {
             return;
         }
 
-        Player player = gameBuilder.getPlayer(playerId);
+        Player.Builder player = game.getPlayer(playerId);
         if (player == null) {
             return;
         }
 
-        Shoe.Builder shoeBuilder = gameBuilder.getShoe().toBuilder();
-
-        Player.Builder playerBuilder = player.toBuilder();
-        PlayerHand.Builder playerHandBuilder = playerBuilder.getHand().toBuilder();
-
-        CardDealer cardDealer = new CardDealer(shoeBuilder.getCards(), playerHandBuilder.getCards(), numberOfCards);
+        CardDealer cardDealer = new CardDealer(
+                game.getShoe().getCards(),
+                player.getHand().getCards(),
+                numberOfCards);
         cardDealer.deal();
 
-        playerBuilder.withHand(playerHandBuilder.build());
-        gameBuilder.updatePlayer(playerBuilder.build());
-
-        gameBuilder.withShoe(shoeBuilder.build());
-
-        repository.save(gameBuilder.build());
+        repository.save(game.build());
     }
 }
