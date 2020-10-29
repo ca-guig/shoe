@@ -34,18 +34,20 @@ public final class PlayerHand {
             return false;
         }
         PlayerHand that = (PlayerHand) o;
-        return Objects.equals(cards, that.cards);
+        return value == that.value
+                && Objects.equals(cards, that.cards);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cards);
+        return Objects.hash(cards, value);
     }
 
     @Override
     public String toString() {
         return "PlayerHand{"
                 + "cards=" + cards
+                + ", value=" + value
                 + '}';
     }
 

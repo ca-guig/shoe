@@ -26,7 +26,7 @@ public final class Game implements Identifiable {
     @JsonProperty(access = READ_ONLY)
     private final List<Player> players;
 
-    public Game(String id, String name, Shoe shoe, List<Player> players) {
+    private Game(String id, String name, Shoe shoe, List<Player> players) {
         this.id = id;
         this.name = name;
         this.shoe = shoe;

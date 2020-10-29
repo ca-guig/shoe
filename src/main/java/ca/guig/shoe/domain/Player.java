@@ -45,12 +45,13 @@ public final class Player {
         }
         Player player = (Player) o;
         return Objects.equals(id, player.id)
-                && Objects.equals(name, player.name);
+                && Objects.equals(name, player.name)
+                && Objects.equals(hand, player.hand);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, hand);
     }
 
     @Override
@@ -58,6 +59,7 @@ public final class Player {
         return "Player{"
                 + "id='" + id + '\''
                 + ", name='" + name + '\''
+                + ", hand=" + hand
                 + '}';
     }
 
